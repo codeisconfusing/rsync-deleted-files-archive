@@ -1,0 +1,189 @@
+# Cloud Services
+Filen Cloud Drive/
+
+# Trash and Recycle
+.Trash-*/
+.Trash*/
+.recycle/
+$RECYCLE.BIN/
+.local/share/Trash/
+Trash/
+
+# Development
+node_modules/
+__pycache__/
+.npm/
+.gradle/caches/
+.ccache/
+Android/
+.android/cache/
+.android/build-cache/
+.android/avd/*/cache/
+.android/avd/*/snapshots/
+.android/gradle/
+
+# Wine
+.wine/
+.wine-backup/
+
+# System Cache and Temp
+.cache/
+.local/share/gvfs-metadata/
+.gvfs/
+.Private/
+.dbus/
+lost+found/
+
+# Icons and Themes
+.local/share/icons/
+
+# Snap packages
+snap/
+
+# Thumbnails
+.thumbnails/
+.thumb/
+Thumbs.db
+.DS_Store
+
+# Session and Logs
+.xsession-errors*
+.wayland-errors
+.recently-used*
+.local/share/RecentDocuments/
+.recently-used.xbel
+.zcompdump*
+.Xauthority
+.ICEauthority
+.gksu.lock
+.pulse*
+.esd_auth
+.VeraCrypt-lock-*
+
+# System Utilities
+.wget-hsts
+.cddb/
+.aptitude/
+
+# Python
+.local/lib/python*/
+
+# Flatpak Cache
+.var/app/*cache*
+.var/app/*Cache*
+.var/app/*tmp*
+.var/app/*/blob_storage/
+.var/app/*/CachedData/
+.var/app/*/Service Worker/
+.var/app/*/Session Storage/
+.var/app/*/GPUCache/
+.var/app/*/cache/thumbnails/
+
+# Browser Cache - Firefox
+.mozilla/firefox/*/Cache/
+.mozilla/firefox/*/minidumps/
+.mozilla/firefox/*/.parentlock
+.mozilla/firefox/*/urlclassifier3.sqlite
+.mozilla/seamonkey/*/Cache/
+.thunderbird/*/Cache/
+
+# Browser Cache - Chrome/Chromium
+.config/google-chrome/*/Local Storage/
+.config/google-chrome/*/Session Storage/
+.config/chromium/*/Local Storage/
+.config/chromium/*/Session Storage/
+.config/BraveSoftware/*/Local Storage/
+.config/BraveSoftware/*/Session Storage/
+
+# Browser Storage (Generic)
+**/storage/default/
+**/storage/permanent/
+**/cache2/
+
+# IDE Cache
+.vscode*/extensions/*/
+.config/Code*/logs/
+.config/Code/Cache/
+.config/Code/CachedData/
+.config/Code/GPUCache/
+.config/VSCodium/Cache/
+.config/VSCodium/CachedData/
+.config/VSCodium/GPUCache/
+.config/VSCodium/User/History/
+.config/VSCodium/CachedExtensionVSIXs/
+.config/VSCodium/User/globalStorage/*/tasks/*/checkpoints/
+.atom/compile-cache/
+
+# Application Cache
+.adobe/
+.macromedia/
+.java/deployment/cache/
+.config/spotify/Users/
+
+# Desktop Cache
+.local/share/baloo/
+.local/share/zeitgeist/
+.local/share/tracker/
+.local/share/torbrowser/
+.steam/
+.local/share/Steam/
+
+# GnuPG Temp
+.gnupg/rnd
+.gnupg/random_seed
+.gnupg/*.lock
+
+# KDE Cache
+.kde*/share/apps/klipper/
+.local/share/klipper/
+
+# System Services
+.cups/
+.keychain/
+.nv/GLCache/
+
+# Citrix
+.ICAClient/logs/
+.ICAClient/.tmp/
+
+# Torrent Temp
+.local/share/qBittorrent/BT_backup/*.fastresume
+
+# Docker/Podman
+.local/share/containers/
+.docker/
+
+# VirtualBox
+VirtualBox VMs/
+.config/VirtualBox/
+
+# Cargo (Rust)
+.cargo/registry/
+.cargo/git/
+
+# Go
+go/pkg/mod/
+
+# pip cache
+.local/share/pip/
+
+# Proton/Wine prefixes for games (large, can be regenerated)
+.local/share/Steam/steamapps/compatdata/
+
+# Lutris runners/wine versions
+.local/share/lutris/runners/
+
+# Thunderbird cache (already have .thunderbird/*/Cache/)
+.mozilla/thunderbird/*/ImapMail/
+
+# Evolution
+.local/share/evolution/mail/local/
+
+# Filen Cache
+.config/@filen/
+
+# Mesa shader caches
+.var/app/*/cache/mesa_shader_cache/
+
+# Obsidian cache
+.var/app/md.obsidian.Obsidian/config/obsidian/IndexedDB/
