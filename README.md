@@ -1,26 +1,21 @@
 # rsync-deleted-files-archive
 Bash script for backup based on rsync with deleted file archive and auto-delete functionality
 
-## 2025 Improvements
+## 2025 Fork Improvements
 
-This fork includes significant improvements and bug fixes to the original script:
+This fork adds practical enhancements to the original script while preserving its excellent core design:
 
-### Key Enhancements
-- **Single rsync pass**: Uses `--backup-dir` to eliminate the race condition from running rsync twice
-- **Better error handling**: Proper mount point verification and exit codes
-- **Exclude file support**: Full integration with rsync exclude files (not just hardcoded patterns)
-- **Improved efficiency**: Replaces `cp` + `rm` with direct rsync archiving (50% faster, less I/O)
-- **Cross-platform compatibility**: Uses `-rtlHs` flags instead of `-a` for better NTFS compatibility
-- **Enhanced logging**: Integrated logging with timestamps and statistics
-- **Execution order fix**: Processes archive cleanup AFTER backup for safer failure recovery
-- **Systemd integration**: Ready-to-use systemd timer examples included
+### Enhancements
+- **Mount point verification**: Prevents backup attempts when drives aren't mounted
+- **Exclude file support**: Use external rsync exclude files instead of hardcoded patterns
+- **Configurable logging**: Log file path now easily configurable via variable
+- **Better error messages**: More descriptive output for troubleshooting
+- **Optional NTFS compatibility**: Commented flag option for cross-platform backups
 
-### What Changed
-The original script ran rsync twice (once for backup, once for dry-run to find deletions), which created a race condition where files could change between runs. The improved version uses rsync's built-in `--backup-dir` feature to archive deleted/modified files in a single pass, making it faster and more reliable.
+### What Stayed the Same
+The original two-pass rsync approach is maintained - it's clear, effective, and ensures the backup destination remains a perfect 1:1 mirror of the source. The manual archiving process gives you full control over what gets archived (deleted files only, not modified versions).
 
-**Performance improvement**: ~50% faster execution, 2x less disk I/O
-
-***
+---
 
 ## Original Project Info
 
@@ -36,23 +31,44 @@ This script is an rsync wrapper with support for deleted file archive and auto-d
 Back when I had Windows, I used to have [bvckup2](https://bvckup2.com/) for my backups. This had an option to archive deleted files on a specific directory and then auto-delete them after a certain amount of days. I searched really deep for something like this but the closest thing I got was snapshot rsync apps (like rsnapshot) which create a mess on the backup (I don't want multiple versions of a file, one is fine for me). So I just made this; a simple script which does exactly that, based on rsync.
 
 ## How?
-~~This app works by first making a normal copy with rsync and then doing a dry run of `rsync --delete`. Then it parses all the files rsync thinks need to be deleted, moves them into an archive folder and saves them in a "database" to delete in a feature date.~~
-
-**Updated (2025)**: The improved version uses rsync's `--backup-dir` flag to directly archive deleted/modified files during the backup operation. This eliminates the need for a second rsync dry-run, making it faster and avoiding race conditions. The database tracking system remains the same for managing archive expiration.
+This script works by first making a normal copy with rsync and then doing a dry run of `rsync --delete`. It parses all the files rsync thinks need to be deleted, moves them into an archive folder, and saves them in a JSON database for deletion after a specified number of days. This two-pass approach keeps the backup as a clean 1:1 mirror while safely archiving deletions.
 
 ## Configuration
 
 Edit these variables at the top of the script:
 
-```bash
+```
 SOURCE_PATH="/home/username/"              # Directory to backup
 BACKUP_PATH="/mnt/backup-drive/backup/"    # Backup destination
 ARCHIVE_PATH="/mnt/backup-drive/rsync-archive/"  # Archive location
 DB_PATH="/mnt/backup-drive/backupdb.json"  # Database file
-EXCLUDE_FILE="/path/to/rsync-exclude.txt"  # Optional: exclude patterns (see example)
+EXCLUDE_FILE="/path/to/rsync-exclude.txt"  # Optional: exclude patterns
 LOG_FILE="/path/to/backup.log"             # Log file location
 MOUNT_POINT="/mnt/backup-drive"            # Mount point to check
 DAYS_AFTER_DELETE=30                       # Archive retention in days
+```
+
+### Optional: NTFS Compatibility
+
+If backing up to an NTFS drive (common for external drives), uncomment this line in the script:
+
+```
+# RSYNC_BASE_FLAGS="-rtlHsRv"  # Uncomment for NTFS drives
+```
+
+This uses specific flags that work better with NTFS than the default `-a` (archive) flag.
+
+## Exclude File Example
+
+Create a file at the path specified in `EXCLUDE_FILE`:
+
+```
+.cache
+.local/share/Trash
+.thumbnails
+node_modules
+__pycache__
+*.tmp
 ```
 
 ## Systemd Automation Example
@@ -69,7 +85,7 @@ ExecStart=/path/to/backup-archive.sh
 ```
 
 Create `/etc/systemd/system/backup-archive.timer`:
-```ini
+```
 [Unit]
 Description=Daily Backup Timer
 
@@ -88,11 +104,42 @@ sudo systemctl enable backup-archive.timer
 sudo systemctl start backup-archive.timer
 ```
 
+## Archive Structure
+
+After running, your archives will look like this:
+
+```
+/mnt/backup-drive/rsync-archive/
+├── Documents/
+│   └── deleted-file.txt
+├── Pictures/
+│   └── old-photo.jpg
+└── .config/
+    └── old-settings.conf
+```
+
+Files are preserved in their original directory structure for easy recovery.
+
+## Database Format
+
+The script tracks archives in a JSON database:
+
+```
+{
+  "pending_deletion": [
+    {
+      "path": "/mnt/backup-drive/rsync-archive/Documents/deleted-file.txt",
+      "delete_on": 1734595200
+    }
+  ]
+}
+```
+
 ## License
 ```
 MIT License
 Copyright (c) 2022 Nikolas Spiridakis
-Copyright (c) 2025 codeisconfusing
+Copyright (c) 2025 Community Contributors
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
